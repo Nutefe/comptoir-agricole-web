@@ -1,0 +1,873 @@
+<template>
+  <v-row justify="center">
+    <v-dialog
+      v-model="dialog"
+      :fullscreen="$vuetify.breakpoint.xsOnly"
+      persistent
+      scrollable
+      max-width="700"
+    >
+      <v-card :disabled="loading" :loading="loading">
+        <v-card-title class="px-3 px-md-5 py-2 py-md-3">
+          <v-row align="center">
+            <v-col cols="9">
+              <span class="text-h6 text-md-h5 font-weight-regular">
+                {{ $t('agregateur.edit') }}
+              </span>
+            </v-col>
+
+            <v-spacer />
+
+            <v-col cols="auto">
+              <v-btn
+                icon
+                large
+                :aria-label="$t('commoin.actions.close')"
+                @click.stop="closeDialog"
+              >
+                <v-icon large>mdi-close</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-title>
+
+        <v-divider />
+
+        <v-card-text class="px-3 px-md-5 pt-3">
+          <v-row>
+            <v-col cols="12" sm="6">
+              <v-autocomplete
+                v-model.trim.lazy="form.pays"
+                :items="matchedPays"
+                item-text="nom"
+                item-value="id"
+                autocomplete="off"
+                :label="$t('agregateur.form.pays')"
+                return-object
+                :error-messages="paysErrors"
+                @input="$v.form.pays.$touch()"
+                @blur="$v.form.pays.$touch()"
+                @change="loadVilleChang"
+              ></v-autocomplete>
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-autocomplete
+                v-model.trim.lazy="form.ville"
+                :items="matchedVilles"
+                :item-text="getItemText"
+                item-value="id"
+                autocomplete="off"
+                :label="$t('agregateur.form.ville')"
+                return-object
+                :error-messages="villeErrors"
+                @input="$v.form.ville.$touch()"
+                @blur="$v.form.ville.$touch()"
+              ></v-autocomplete>
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-autocomplete
+                v-model.trim.lazy="form.magasins"
+                :items="matchedMagasins"
+                item-text="nom"
+                item-value="id"
+                autocomplete="off"
+                :label="$t('agregateur.form.magasin')"
+                chips
+                deletable-chips
+                multiple
+                return-object
+                :error-messages="magasinErrors"
+                @input="$v.form.magasins.$touch()"
+                @blur="$v.form.magasins.$touch()"
+              ></v-autocomplete>
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model.trim.lazy="form.username"
+                :label="$t('agregateur.form.username')"
+                autocomplete="off"
+                :maxlength="$v.form.username.$params.maxLength.max"
+                :error-messages="usernameErrors"
+                @input="
+                  $v.form.username.$touch()
+                  checkUniqueUsername()
+                "
+                @blur="
+                  $v.form.username.$touch()
+                  checkUniqueUsername()
+                "
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model.trim.lazy="form.email"
+                :label="$t('agregateur.form.email')"
+                type="email"
+                autocomplete="off"
+                :maxlength="$v.form.email.$params.maxLength.max"
+                :error-messages="emailErrors"
+                @input="
+                  $v.form.email.$touch()
+                  checkUniqueEmail()
+                "
+                @blur="
+                  $v.form.email.$touch()
+                  checkUniqueEmail()
+                "
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model.trim.lazy="form.telephone"
+                :label="$t('agregateur.form.telephone')"
+                type="number"
+                autocomplete="off"
+                :maxlength="$v.form.telephone.$params.maxLength.max"
+                :error-messages="telephoneErrors"
+                @input="
+                  $v.form.telephone.$touch()
+                  checkUniqueTelephone()
+                "
+                @blur="
+                  $v.form.telephone.$touch()
+                  checkUniqueTelephone()
+                "
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model.trim.lazy="form.nom"
+                :label="$t('agregateur.form.nom')"
+                autocomplete="off"
+                :maxlength="$v.form.nom.$params.maxLength.max"
+                :error-messages="nomErrors"
+                @input="$v.form.nom.$touch()"
+                @blur="$v.form.nom.$touch()"
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model.trim.lazy="form.prenom"
+                :label="$t('agregateur.form.prenom')"
+                autocomplete="off"
+                :maxlength="$v.form.prenom.$params.maxLength.max"
+                :error-messages="prenomErrors"
+                @input="$v.form.prenom.$touch()"
+                @blur="$v.form.prenom.$touch()"
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model.trim.lazy="form.entreprise"
+                :label="$t('agregateur.form.entreprise')"
+                autocomplete="off"
+                :maxlength="$v.form.entreprise.$params.maxLength.max"
+                :error-messages="entrepriseErrors"
+                @input="$v.form.entreprise.$touch()"
+                @blur="$v.form.entreprise.$touch()"
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model.trim.lazy="form.adresse"
+                :label="$t('agregateur.form.adresse')"
+                autocomplete="off"
+                :maxlength="$v.form.adresse.$params.maxLength.max"
+                :error-messages="adresseErrors"
+                @input="$v.form.adresse.$touch()"
+                @blur="$v.form.adresse.$touch()"
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model.trim.lazy="form.longitude"
+                :label="$t('agregateur.form.longitude')"
+                type="number"
+                  step="0.01"
+                autocomplete="off"
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model.trim.lazy="form.latitude"
+                :label="$t('agregateur.form.latitude')"
+                type="number"
+                  step="0.01"
+                autocomplete="off"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-card-text>
+
+        <v-divider />
+
+        <v-card-actions class="py-4">
+          <v-row
+            align="center"
+            justify="center"
+            justify-sm="end"
+            class="px-2 px-md-4 py-3"
+          >
+            <v-btn class="mr-3" text @click="closeDialog">
+              {{ $t('commoin.actions.cancel') }}
+            </v-btn>
+
+            <v-btn
+              :disabled="!isFormValid"
+              color="primary"
+              depressed
+              @click="submitForm"
+            >
+              {{ $t('commoin.actions.save') }}
+            </v-btn>
+          </v-row>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-row>
+</template>
+
+<script>
+import { mapState } from 'vuex'
+import { email, maxLength, minLength, required } from 'vuelidate/lib/validators'
+import { usernameRegex } from '~/helpers/customValidators'
+import { debounce, isEqual } from '~/helpers/helpers.js'
+
+export default {
+  name: 'AgregateurEdit',
+  data() {
+    return {
+      dialog: false,
+      loading: false,
+      id: null,
+      selectedItem: {
+        username: '',
+        email: '',
+        telephone: '',
+        nom: '',
+        prenom: '',
+        entreprise: '',
+        adresse: '',
+        magasins: [],
+        ville: null,
+        pays: null,
+        longitude: 0,
+        latitude: 0,
+      },
+      form: {
+        username: '',
+        email: '',
+        telephone: '',
+        nom: '',
+        prenom: '',
+        entreprise: '',
+        adresse: '',
+        magasins: [],
+        ville: null,
+        pays: null,
+        longitude: 0,
+        latitude: 0,
+      },
+      isUnique: {
+        username: false,
+        email: false,
+        telephone: false,
+      },
+      isPending: {
+        username: false,
+        email: false,
+        telephone: false,
+      },
+      isLoaded: {
+        username: false,
+        email: false,
+        telephone: false,
+      },
+    }
+  },
+  validations: {
+    form: {
+      username: {
+        required,
+        minLength: minLength(4),
+        maxLength: maxLength(20),
+        regex: usernameRegex,
+      },
+      email: {
+        required,
+        email,
+        maxLength: maxLength(200),
+      },
+      telephone: {
+        required,
+        minLength: minLength(2),
+        maxLength: maxLength(100),
+      },
+      nom: {
+        required,
+        minLength: minLength(2),
+        maxLength: maxLength(100),
+      },
+      prenom: {
+        required,
+        minLength: minLength(2),
+        maxLength: maxLength(100),
+      },
+      entreprise: {
+        required,
+        minLength: minLength(2),
+        maxLength: maxLength(100),
+      },
+      adresse: {
+        required,
+        minLength: minLength(2),
+        maxLength: maxLength(100),
+      },
+      pays: {
+        required,
+      },
+      ville: {
+        required,
+      },
+      magasins: {
+        required,
+      },
+    },
+  },
+  async fetch() {
+    this.loading = true
+    try {
+      await Promise.all([
+        this.$store.dispatch('pays/fetchAllPayss'),
+        this.$store.dispatch('ville/fetchAllVilles'),
+      ])
+    } catch (err) {
+      this.$nuxt.error({
+        statusCode: 503,
+        message: 'Unable to fetch data.',
+      })
+    }
+    this.loading = false
+  },
+  computed: {
+    isFormValid() {
+      const isFormEdited = !isEqual(this.selectedItem, this.form)
+      return (
+        isFormEdited &&
+        !this.$v.form.$invalid &&
+        !this.$v.form.$pending &&
+        this.isUnique.username &&
+        this.isUnique.email &&
+        this.isUnique.telephone
+      )
+    },
+    usernameErrors() {
+      const errors = []
+
+      if (!this.$v.form.username.$dirty) return errors
+
+      !this.$v.form.username.required &&
+        errors.push(this.$t('validations.username.required'))
+
+      !this.$v.form.username.minLength &&
+        errors.push(
+          this.$t('validations.username.min', {
+            length: this.$v.form.username.$params.minLength.min,
+          })
+        )
+
+      !this.$v.form.username.maxLength &&
+        errors.push(
+          this.$t('validations.username.max', {
+            length: this.$v.form.username.$params.maxLength.max,
+          })
+        )
+
+      !this.$v.form.username.regex &&
+        errors.push(this.$t('validations.username.regex'))
+
+      this.form.username &&
+        !this.isPending.username &&
+        !this.isUnique.username &&
+        errors.push(this.$t('validations.username.unique'))
+
+      return errors
+    },
+    emailErrors() {
+      const errors = []
+
+      if (!this.$v.form.email.$dirty) return errors
+
+      !this.$v.form.email.required &&
+        errors.push(this.$t('validations.email.required'))
+
+      !this.$v.form.email.email &&
+        errors.push(this.$t('validations.email.email'))
+
+      !this.$v.form.email.maxLength &&
+        errors.push(
+          this.$t('validations.email.max', {
+            length: this.$v.form.email.$params.maxLength.max,
+          })
+        )
+
+      this.form.email &&
+        !this.isPending.email &&
+        !this.isUnique.email &&
+        errors.push(this.$t('validations.email.unique'))
+
+      return errors
+    },
+    telephoneErrors() {
+      const errors = []
+
+      if (!this.$v.form.telephone.$dirty) return errors
+
+      !this.$v.form.telephone.required &&
+        errors.push(this.$t('validations.telephone.required'))
+
+      !this.$v.form.telephone.maxLength &&
+        errors.push(
+          this.$t('validations.telephone.max', {
+            length: this.$v.form.telephone.$params.maxLength.max,
+          })
+        )
+
+      this.form.telephone &&
+        !this.isPending.telephone &&
+        !this.isUnique.telephone &&
+        errors.push(this.$t('validations.telephone.unique'))
+
+      return errors
+    },
+    paysErrors() {
+      const errors = []
+
+      if (!this.$v.form.pays.$dirty) return errors
+
+      !this.$v.form.pays.required &&
+        errors.push(this.$t('validations.pays.required'))
+
+      return errors
+    },
+
+    villeErrors() {
+      const errors = []
+
+      if (!this.$v.form.ville.$dirty) return errors
+
+      !this.$v.form.ville.required &&
+        errors.push(this.$t('validations.ville.required'))
+
+      return errors
+    },
+
+    magasinErrors() {
+      const errors = []
+
+      if (!this.$v.form.magasins.$dirty) return errors
+
+      !this.$v.form.magasins.required &&
+        errors.push(this.$t('validations.magasin.required'))
+
+      return errors
+    },
+
+    nomErrors() {
+      const errors = []
+
+      if (!this.$v.form.nom.$dirty) return errors
+
+      !this.$v.form.nom.required &&
+        errors.push(this.$t('validations.nom.required'))
+
+      !this.$v.form.nom.minLength &&
+        errors.push(
+          this.$t('validations.nom.min', {
+            length: this.$v.form.nom.$params.minLength.min,
+          })
+        )
+
+      !this.$v.form.nom.maxLength &&
+        errors.push(
+          this.$t('validations.nom.max', {
+            length: this.$v.form.nom.$params.maxLength.max,
+          })
+        )
+
+      return errors
+    },
+    prenomErrors() {
+      const errors = []
+
+      if (!this.$v.form.prenom.$dirty) return errors
+
+      !this.$v.form.prenom.required &&
+        errors.push(this.$t('validations.prenom.required'))
+
+      !this.$v.form.prenom.minLength &&
+        errors.push(
+          this.$t('validations.prenom.min', {
+            length: this.$v.form.prenom.$params.minLength.min,
+          })
+        )
+
+      !this.$v.form.prenom.maxLength &&
+        errors.push(
+          this.$t('validations.prenom.max', {
+            length: this.$v.form.prenom.$params.maxLength.max,
+          })
+        )
+
+      return errors
+    },
+    entrepriseErrors() {
+      const errors = []
+
+      if (!this.$v.form.entreprise.$dirty) return errors
+
+      !this.$v.form.entreprise.required &&
+        errors.push(this.$t('validations.entreprise.required'))
+
+      !this.$v.form.entreprise.minLength &&
+        errors.push(
+          this.$t('validations.entreprise.min', {
+            length: this.$v.form.entreprise.$params.minLength.min,
+          })
+        )
+
+      !this.$v.form.entreprise.maxLength &&
+        errors.push(
+          this.$t('validations.entreprise.max', {
+            length: this.$v.form.entreprise.$params.maxLength.max,
+          })
+        )
+
+      return errors
+    },
+    adresseErrors() {
+      const errors = []
+
+      if (!this.$v.form.adresse.$dirty) return errors
+
+      !this.$v.form.adresse.required &&
+        errors.push(this.$t('validations.adresse.required'))
+
+      !this.$v.form.adresse.minLength &&
+        errors.push(
+          this.$t('validations.adresse.min', {
+            length: this.$v.form.adresse.$params.minLength.min,
+          })
+        )
+
+      !this.$v.form.adresse.maxLength &&
+        errors.push(
+          this.$t('validations.adresse.max', {
+            length: this.$v.form.adresse.$params.maxLength.max,
+          })
+        )
+
+      return errors
+    },
+
+    matchedPays() {
+      return this.pays.map((pay) => {
+        const pays = pay.libelle
+        return Object.assign({}, pay, { pays })
+      })
+    },
+
+    matchedVilles() {
+      return this.villes.map((ville) => {
+        const villes = ville.nom
+        return Object.assign({}, ville, { villes })
+      })
+    },
+
+    matchedMagasins() {
+      return this.magasins.map((magasin) => {
+        const magasins = magasin.nom
+        return Object.assign({}, magasin, { magasins })
+      })
+    },
+    ...mapState({
+      pays: (state) => state.pays.allPays,
+      villes: (state) => state.ville.allVilles,
+      magasins: (state) => state.magasin.allMagasins,
+    }),
+  },
+  watch: {
+    'form.username'() {
+      if (this.isLoaded.username) {
+        this.isPending.username = true
+        this.isUnique.username = false
+      }
+      this.isLoaded.username = true
+    },
+    'form.email'() {
+      if (this.isLoaded.email) {
+        this.isPending.email = true
+        this.isUnique.email = false
+      }
+      this.isLoaded.email = true
+    },
+    'form.telephone'() {
+      if (this.isLoaded.telephone) {
+        this.isPending.telephone = true
+        this.isUnique.telephone = false
+      }
+      this.isLoaded.telephone = true
+    },
+  },
+  methods: {
+    checkUniqueUsername: debounce(
+      async function () {
+        if (
+          this.form.username === '' ||
+          this.form.username === null ||
+          this.$v.form.username.$invalid
+        ) {
+          return
+        }
+
+        try {
+          const result = await this.$api.checkUserUsernameUpdate(
+            this.form.username,
+            this.id
+          )
+          this.isUnique.username = !result
+        } catch (err) {
+          this.isUnique.username = false
+
+          if (!err.response) {
+            this.$nuxt.error({
+              statusCode: 503,
+              message: 'Unable to fetch data.',
+            })
+          }
+        }
+
+        this.isPending.username = false
+      },
+      500,
+      -1
+    ),
+    checkUniqueEmail: debounce(
+      async function () {
+        if (
+          this.form.email === '' ||
+          this.form.email === null ||
+          this.$v.form.email.$invalid
+        ) {
+          return
+        }
+
+        try {
+          const result = await this.$api.checkUserEmailUpdate(
+            this.form.email,
+            this.id
+          )
+          this.isUnique.email = !result
+        } catch (err) {
+          this.isUnique.email = false
+
+          if (!err.response) {
+            this.$nuxt.error({
+              statusCode: 503,
+              message: 'Unable to fetch data.',
+            })
+          }
+        }
+
+        this.isPending.email = false
+      },
+      500,
+      -1
+    ),
+    checkUniqueTelephone: debounce(
+      async function () {
+        if (
+          this.form.telephone === '' ||
+          this.form.telephone === null ||
+          this.$v.form.telephone.$invalid
+        ) {
+          return
+        }
+
+        try {
+          const result = await this.$api.checkTel(this.form.telephone)
+          this.isUnique.telephone = !result
+        } catch (err) {
+          this.isUnique.telephone = false
+
+          if (!err.response) {
+            this.$nuxt.error({
+              statusCode: 503,
+              message: 'Unable to fetch data.',
+            })
+          }
+        }
+
+        this.isPending.telephone = false
+      },
+      500,
+      -1
+    ),
+    getItemText(item) {
+      return `${item.region.nom} ${item.nom}`
+    },
+    async loadVilleChang() {
+      this.loading = true
+      try {
+        this.form.ville = null
+        await this.$store.dispatch(
+          'ville/fetchAllVillesPays',
+          this.form.pays.id
+        )
+      } catch (err) {
+        this.$nuxt.error({
+          statusCode: 503,
+          message: 'Unable to fetch data.',
+        })
+      }
+      this.loading = false
+    },
+    openDialog(item) {
+      this.id = item.id
+      this.form = {
+        username: item.username || '',
+        email: item.email || '',
+        telephone: item.telephone || '',
+        ville: item.ville || null,
+        pays: item.ville.region.pays || null,
+        nom: item.nom || '',
+        prenom: item.prenom || '',
+        adresse: item.adresse || '',
+        entreprise: item.entreprise || '',
+        magasins: item.magasins || [],
+        longitude: item.longitude || 0,
+        latitude: item.latitude || 0,
+      }
+      this.selectedItem = Object.assign({}, this.form)
+
+      this.isUnique = {
+        username: !!this.form.username,
+        email: !!this.form.email,
+        telephone: !!this.form.telephone,
+      }
+      this.isLoaded = {
+        username: false,
+        email: false,
+        telephone: false,
+      }
+
+      this.dialog = true
+    },
+    closeDialog() {
+      this.dialog = false
+
+      this.isUnique = {
+        username: false,
+        email: false,
+        telephone: false,
+      }
+      this.isPending = {
+        username: false,
+        email: false,
+        telephone: false,
+      }
+      this.isLoaded = {
+        username: false,
+        email: false,
+        telephone: false,
+      }
+      this.$v.form.$reset()
+
+      this.id = null
+      this.form = {
+        username: '',
+        email: '',
+        telephone: '',
+        nom: '',
+        prenom: '',
+        entreprise: '',
+        adresse: '',
+        magasins: [],
+        ville: null,
+        pays: null,
+        longitude: 0,
+        latitude: 0,
+      }
+      this.selectedItem = {
+        username: '',
+        email: '',
+        telephone: '',
+        nom: '',
+        prenom: '',
+        entreprise: '',
+        adresse: '',
+        magasins: [],
+        ville: null,
+        pays: null,
+        longitude: 0,
+        latitude: 0,
+      }
+
+      this.loading = false
+    },
+    async submitForm() {
+      this.$v.form.$touch()
+
+      if (this.isFormValid) {
+        this.loading = true
+
+        try {
+          await this.$api.updateUserAgregateur(
+            {
+              username: this.form.username,
+              email: this.form.email,
+              telephone: this.form.telephone,
+              ville: this.form.ville.id,
+              nom: this.form.nom,
+              prenom: this.form.prenom,
+              entreprise: this.form.entreprise,
+              adresse: this.form.adresse,
+              magasins: this.form.magasins,
+              longitude: this.form.longitude,
+              latitude: this.form.latitude,
+              role: 2,
+            },
+            this.id
+          )
+          this.$emit('refreshPage')
+
+          this.closeDialog()
+          this.$toast.success(this.$t('commoin.saved'))
+        } catch (err) {
+          this.loading = false
+
+          if (err.response) {
+            this.$toast.error(this.$t('commoin.errorOccured'))
+          } else {
+            this.$nuxt.error({
+              statusCode: 503,
+              message: 'Unable to fetch data.',
+            })
+          }
+        }
+      }
+    },
+  },
+}
+</script>
