@@ -11,6 +11,7 @@
             v-for="item in categories"
             :key="item.id"
             :title="item.libelle"
+            @click="fetchSpeculationCat(item.id)"
           >
             <v-list-item-icon v-if="item.fichier">
               <v-avatar size="25"
@@ -55,7 +56,12 @@
             open-on-hover
           >
             <template #activator="{ on, attrs }">
-              <v-list-item class="text-center" v-bind="attrs" title="Autres" v-on="on">
+              <v-list-item
+                class="text-center"
+                v-bind="attrs"
+                title="Autres"
+                v-on="on"
+              >
                 <v-icon>mdi-filter-menu </v-icon>
                 <v-list-item-content>
                   <v-list-item-title>
@@ -76,6 +82,7 @@
                   :key="`subItem-${subItem.libelle}`"
                   color="primary"
                   nuxt
+                  @click="fetchSpeculationCat(subItem.id)"
                 >
                   <v-list-item-content>
                     <v-list-item-title>
@@ -112,6 +119,24 @@ export default {
       type: Array,
       default: null,
       required: true,
+    },
+  },
+
+  methods: {
+    async fetchSpeculationCat(ids) {
+      this.loading = true
+      try {
+        await this.$store.dispatch(
+          'speculationAgregateur/fetchAuthSpeculationsCat',
+          { id: ids, page: 1 }
+        )
+      } catch (err) {
+        this.$nuxt.error({
+          statusCode: 503,
+          message: 'Unable to fetch data.',
+        })
+      }
+      this.loading = false
     },
   },
 }

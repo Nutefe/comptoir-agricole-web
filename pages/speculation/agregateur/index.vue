@@ -57,7 +57,7 @@
               md="4"
             >
               <v-card class="mx-auto" outlined>
-                <v-list-item three-line>
+                <v-list-item three-line @click="showItem(item)">
                   <v-list-item-avatar tile size="100" color="grey"
                     ><v-img
                       v-if="item.fichiers[0]"
@@ -93,6 +93,32 @@
 
                       <span>
                         {{ $t('commoin.actions.edit') }}
+                      </span>
+                    </v-tooltip>
+                    <v-tooltip top>
+                      <template #activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          class="mr-3"
+                          small
+                          icon
+                          :aria-label="$t('speculation.disable')"
+                          v-on="on"
+                          @click.stop="enableItem(item)"
+                        >
+                          <v-icon v-if="item.valide" color="secondary" small>
+                            mdi-check-circle
+                          </v-icon>
+                          <v-icon v-else color="red" small>
+                            mdi-check-circle
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span v-if="item.valide">
+                        {{ $t('speculation.disable') }}
+                      </span>
+                      <span v-else>
+                        {{ $t('speculation.enable') }}
                       </span>
                     </v-tooltip>
                   </v-list-item-action>
@@ -142,6 +168,7 @@
         <v-col></v-col>
       </template>
     </v-row>
+    <DetailDialog ref="detailDialog" forme="true" />
   </v-container>
 </template>
 
@@ -153,6 +180,7 @@ import SpeAgregateurCreate from '~/components/page/speculation/agregateur/SpeAgr
 import SpeAgregateurEdit from '~/components/page/speculation/agregateur/SpeAgregateurEdit.vue'
 import SpeExploitantCreate from '~/components/page/speculation/exploitant/SpeExploitantCreate.vue'
 import SpeExploitantEdit from '~/components/page/speculation/exploitant/SpeExploitantEdit.vue'
+import DetailDialog from '~/components/dialog/DetailDialog.vue'
 
 export default {
   name: 'ProduitPage',
@@ -163,6 +191,7 @@ export default {
     SpeAgregateurEdit,
     SpeExploitantCreate,
     SpeExploitantEdit,
+    DetailDialog,
   },
 
   mixins: [mixinRoles],
@@ -284,6 +313,9 @@ export default {
   },
 
   methods: {
+     showItem(item) {
+      this.$refs.detailDialog.openDialog(item)
+    },
     toggleLoading(value) {
       this.loading = value
     },
@@ -293,6 +325,45 @@ export default {
     editItem(item) {
       this.$refs.editFormDialog.openDialog(item)
     },
+    // enableItem(item) {
+    //   this.$refs.editFormDialog.openDialog(item)
+    // },
+
+    async enableItem(item) {
+      if (this.$vuetify.breakpoint.mobile) {
+        this.$store.dispatch('toggleDrawer', false)
+      }
+
+      const result = await this.$swal({
+        icon: 'question',
+        titleText: this.$t('speculation.question'),
+        confirmButtonText: this.$t('commoin.actions.yes'),
+        cancelButtonText: this.$t('commoin.actions.no'),
+        confirmButtonAriaLabel: this.$t('commoin.actions.yes'),
+        cancelButtonAriaLabel: this.$t('commoin.actions.no'),
+        showCancelButton: true,
+        allowOutsideClick: () => {
+          const popup = this.$swal.getPopup()
+          popup.classList.remove('swal2-show')
+          setTimeout(() => {
+            popup.classList.add('animate__animated', 'animate__headShake')
+          })
+          setTimeout(() => {
+            popup.classList.remove('animate__animated', 'animate__headShake')
+          }, 500)
+          return false
+        },
+      })
+
+      if (result.isConfirmed) {
+        this.$store.dispatch('speculation/enableSpeculations', item.id)
+        this.fetchData(1)
+        this.$toast.success(this.$t('commoin.valide'))
+      } else if (this.$vuetify.breakpoint.smAndDown) {
+        this.$store.dispatch('toggleDrawer', true)
+      }
+    },
+
     startCase(str) {
       if (str) {
         return startCase(str)

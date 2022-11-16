@@ -16,6 +16,7 @@ export default {
     navigation: {
         accueil: "Accueil",
         dashboard: "Dashboard",
+        commande: "Panier",
         user: {
             title: "Users",
             admin: "Admins",
@@ -171,7 +172,7 @@ export default {
 
     user: {
         title: "Utilisateurs",
-        new: "Nouveau utilisateur crm",
+        new: "Nouveau utilisateur",
         edit: "Modifier un utilisateur",
         update: "Modifier",
         search: "Recherche...",
@@ -201,8 +202,8 @@ export default {
     },
     admin: {
         title: "Utilisateurs admin",
-        new: "Nouveau utilisateur admin",
-        edit: "Modifier un utilisateur admin",
+        new: "Nouveau utilisateur",
+        edit: "Modifier un utilisateur",
         update: "Modifier",
         search: "Recherche...",
         subtitle: "Voir votre profil",
@@ -233,8 +234,8 @@ export default {
 
     client: {
         title: "Utilisateurs client",
-        new: "Nouveau utilisateur client",
-        edit: "Modifier un utilisateur client",
+        new: "Nouveau utilisateur",
+        edit: "Modifier un utilisateur",
         update: "Modifier",
         search: "Recherche...",
         subtitle: "Voir votre profil",
@@ -265,8 +266,8 @@ export default {
 
     exploitant: {
         title: "Utilisateurs exploitant",
-        new: "Nouveau utilisateur exploitant",
-        edit: "Modifier un utilisateur exploitant",
+        new: "Nouveau utilisateur",
+        edit: "Modifier un utilisateur",
         update: "Modifier",
         search: "Recherche...",
         subtitle: "Voir votre profil",
@@ -311,8 +312,8 @@ export default {
 
     agregateur: {
         title: "Utilisateurs agregateur",
-        new: "Nouveau utilisateur agregateur",
-        edit: "Modifier un utilisateur agregateur",
+        new: "Nouveau utilisateur",
+        edit: "Modifier un utilisateur",
         update: "Modifier",
         search: "Recherche...",
         subtitle: "Voir votre profil",
@@ -361,7 +362,7 @@ export default {
         edit: "Modifier une categorie",
         update: "Modifier",
         search: "Recherche...",
-        all:"Toutes les categories",
+        all: "Toutes les categories",
         form: {
             libelle: "Libelle",
         },
@@ -504,6 +505,9 @@ export default {
         update: "Modifier",
         search: "Recherche...",
         etat: "Etat du stock",
+        enable: "Rendre visible",
+        disable: "Rendre non visible",
+        question: "Prêt à validé cette spéculation?",
         form: {
             produit: "Produit",
             superficie: "Superficie",
@@ -535,6 +539,32 @@ export default {
         },
     },
 
+    commande: {
+        title: "Commande",
+        new: "Passe une commande",
+        edit: "Modifier une commande",
+        update: "Modifier",
+        search: "Recherche...",
+        bay: "Acheter",
+        bayNow: "Acheter maintenant",
+        panier: "Ajouter au panier",
+        question: "Prêt à validé la commande?",
+        annuler: "Annuler la caommande?",
+        annuler1: "Annuler la caommande",
+        form: {
+            produit: "Produit",
+            stock: "Stock",
+        },
+        table: {
+            num: "N°",
+            produit: "Produit",
+            stock: "Stock",
+            action: "Action",
+            per_page: "Produit par page",
+            page_text: "de",
+        },
+    },
+
     commoin: {
         title: "Commoins",
         search: "Recherche...",
@@ -561,7 +591,7 @@ export default {
             choose: "Glissez et déposez vos images ici ou cliquez pour les sélectionner",
             hint: "Au plus {length} image(s) de moins de {size} Mo chacune.",
         },
-
+        valide: "Validé avec succès.",
         saved: "Enregistré avec succès.",
         noData: "Aucune donnée disponible",
         errorOccured: "Une erreur est survenue. Veuillez réessayer.",

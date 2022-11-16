@@ -15,14 +15,6 @@ export const mutations = {
         state.allSpeculations = allSpeculations;
     },
 
-    SET_SPECULATIONS(state, speculations) {
-        state.speculations = speculations;
-    },
-
-    SET_SEARCHED_SPECULATIONS(state, speculations) {
-        state.speculations = speculations;
-    },
-
     SET_SPECULATION(state, speculation) {
         state.speculation = speculation;
     },
@@ -43,22 +35,6 @@ export const actions = {
         return this.$api.getAllSpeculations().then((data) => {
             commit("SET_ALL_SPECULATIONS", data);
         });
-    },
-
-    fetchSpeculations({ commit }, page) {
-        return this.$api.selectAllSpeculationPage(page).then((data) => {
-            commit("SET_SPECULATIONS", data);
-        });
-    },
-
-    searchSpeculations({ commit }, { page, search }) {
-        return this.$api.searchAllSpeculationPage(page, search).then((data) => {
-            commit("SET_SEARCHED_SPECULATIONS", data);
-        });
-    },
-
-    enableSpeculations({ commit }, id) {
-        return this.$api.enableSpeculation(id);
     },
 
 };

@@ -3,6 +3,7 @@ const initialState = () => ({
     user: null,
     allUsers: [],
     etat: false,
+    userConnect: null,
 });
 
 export const state = initialState;
@@ -28,6 +29,10 @@ export const mutations = {
         state.user = user;
     },
 
+    SET_USER_CONNECT(state, userConnect) {
+        state.userConnect = userConnect;
+    },
+
     SET_CURRENT_PAGE(state, page) {
         state.users.current_page = page;
     },
@@ -38,6 +43,12 @@ export const actions = {
     
     resetState({ commit }) {
         commit("RESET_STATE");
+    },
+
+    fetchAllUserConnect({ commit }) {
+        return this.$api.getUserConnect().then((data) => {
+            commit("SET_USER_CONNECT", data);
+        });
     },
 
     fetchAllUsers({ commit }) {

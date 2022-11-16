@@ -1529,7 +1529,17 @@ export default ($axios, $auth) => ({
             },
         });
     },
+    enableSpeculation(id) {
+        if (!$auth.loggedIn) {
+            return;
+        }
 
+        return $axios.$get(`/speculation/valide/${id}`, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+            },
+        });
+    },
     // ------------------------ AUTH ----------
 
     getAllAuthSpeculations() {
@@ -1550,6 +1560,14 @@ export default ($axios, $auth) => ({
 
     searchAllAuthSpeculationValidePage(page, s) {
         return $axios.$get(`/auth/speculations/valide/search/page/${page}/${s}`)
+    },
+
+    selectAllAuthSpeculationCatValidePage(id, page) {
+        return $axios.$get(`/auth/speculations/valide/categorie/page/${id}/${page}`)
+    },
+
+    searchAllAuthSpeculationCatValidePage(id, page, s) {
+        return $axios.$get(`/auth/speculations/valide/categorie/search/page/${id}/${page}/${s}`)
     },
 
     /**

@@ -21,7 +21,10 @@
                   delimiter-icon="mdi-minus"
                   dark
                 >
-                  <v-carousel-item v-for="slide in topProduits" :key="`carousel-item-${slide.id}`">
+                  <v-carousel-item
+                    v-for="slide in topProduits"
+                    :key="`carousel-item-${slide.id}`"
+                  >
                     <v-img
                       class="fill-height"
                       :src="`${$axios.defaults.baseURL}/downloadFile/${slide.fichier.name}`"
@@ -57,7 +60,7 @@
                   </v-carousel-item>
                 </v-carousel>
               </v-col>
-              <v-col v-show="!$vuetify.breakpoint.lgAndDown" cols="12" sm="2">
+              <v-col v-show="!$vuetify.breakpoint.lgAndDown && !$auth.user" cols="12" sm="2">
                 <LoginCard />
               </v-col>
             </v-row>
@@ -102,7 +105,7 @@ export default {
       await Promise.all([
         this.$store.dispatch('categorie/fetchTopCategories'),
         this.$store.dispatch('produit/fetchTopProduits'),
-        this.$store.dispatch('speculationAgregateur/fetchAllSpeculations'),
+        this.$store.dispatch('speculationAgregateur/fetchAuthSpeculations', 1),
       ])
     } catch (err) {
       this.$nuxt.error({
@@ -121,7 +124,7 @@ export default {
 
   computed: {
     isSm() {
-      if (this.$vuetify.breakpoint.lgAndDown) {
+      if (this.$vuetify.breakpoint.lgAndDown || this.$vuetify.breakpoint.lgAndDown) {
         return 3
       } else {
         return 2
@@ -129,7 +132,7 @@ export default {
     },
 
     isSmC() {
-      if (this.$vuetify.breakpoint.lgAndDown) {
+      if (this.$auth.user || this.$vuetify.breakpoint.lgAndDown) {
         return 9
       } else {
         return 8
@@ -173,8 +176,10 @@ export default {
     ...mapState({
       topCategories: (state) => state.categorie.topCategories,
       topProduits: (state) => state.produit.topProduits,
-      speculations: (state) => state.speculationAgregateur.allSpeculations,
+      speculations: (state) => state.speculationAgregateur.authSpeculations,
     }),
   },
+
+  methods: {},
 }
 </script>

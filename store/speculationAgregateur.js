@@ -78,4 +78,16 @@ export const actions = {
         });
     },
 
+    fetchAuthSpeculationsCat({ commit }, { id, page }) {
+        return this.$api.selectAllAuthSpeculationCatValidePage(id, page).then((data) => {
+            commit("SET_AUTH_SPECULATIONS", data);
+        });
+    },
+
+    searchAuthSpeculationsCat({ commit }, { id, page, search }) {
+        return this.$api.searchAllAuthSpeculationCatValidePage(id, page, search).then((data) => {
+            commit("SET_SEARCHED_AUTH_SPECULATIONS", data);
+        });
+    },
+
 };

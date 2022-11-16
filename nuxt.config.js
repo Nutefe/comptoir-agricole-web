@@ -1,7 +1,7 @@
 import sitemapRoutes from "./helpers/sitemap.js";
 
 const SITE_NAME = "COMPTOIRE AGRICOLE";
-const SITE_DESC = `agricole.`;
+const SITE_DESC = `agricole`;
 const HOST = "";
 
 // Development
@@ -220,6 +220,7 @@ export default {
 
   build: {
     postcss: null,
+
   },
 
   router: {

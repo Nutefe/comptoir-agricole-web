@@ -96,6 +96,11 @@ export default {
         {
           title: this.$t('navigation.speculation.title'),
           path: '/speculation',
+          icon: 'mdi-chart-scatter-plot-hexbin',
+        },
+        {
+          title: this.$t('navigation.commande'),
+          path: '/commande',
           icon: 'mdi-shopping',
         },
       ],
@@ -176,11 +181,11 @@ export default {
                 path: '/parametre/produit',
                 icon: 'mdi-file-chart-outline',
               },
-              {
-                title: this.$t('navigation.parametre.modePaiement'),
-                path: '/parametre/modePaiement',
-                icon: 'mdi-file-chart-outline',
-              },
+              // {
+              //   title: this.$t('navigation.parametre.modePaiement'),
+              //   path: '/parametre/modePaiement',
+              //   icon: 'mdi-file-chart-outline',
+              // },
               // {
               //   title: this.$t('navigation.parametre.typeSpeculation'),
               //   path: '/parametre/typeSpeculation',

@@ -22,7 +22,7 @@
               <v-btn
                 icon
                 large
-                :aria-label="$t('actions.close')"
+                :aria-label="$t('commoin.actions.close')"
                 @click.stop="closeDialog"
               >
                 <v-icon large>mdi-close</v-icon>

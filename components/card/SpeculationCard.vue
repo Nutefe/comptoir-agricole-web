@@ -18,7 +18,7 @@
             {{ speculation.description }}
           </v-list-item-subtitle>
         </v-list-item-content>
-        <!-- <v-list-item-action>
+        <v-list-item-action>
           <v-spacer />
           <v-tooltip top>
             <template #activator="{ on, attrs }">
@@ -27,23 +27,42 @@
                 class="mr-3"
                 small
                 icon
-                :aria-label="$t('commoin.actions.edit')"
+                :aria-label="$t('commande.bayNow')"
                 v-on="on"
-                @click.stop="editItem(speculation)"
+                @click.stop="commandeNow(speculation)"
               >
-                <v-icon small> mdi-pencil </v-icon>
+                <v-icon small> mdi-cart </v-icon>
               </v-btn>
             </template>
 
             <span>
-              {{ $t('commoin.actions.edit') }}
+              {{ $t('commande.bayNow') }}
             </span>
           </v-tooltip>
-        </v-list-item-action> -->
+          <v-tooltip top>
+            <template #activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                class="mr-3"
+                small
+                icon
+                :aria-label="$t('commande.panier')"
+                v-on="on"
+                @click.stop="panierNow(speculation)"
+              >
+                <v-icon small> mdi-basket </v-icon>
+              </v-btn>
+            </template>
+
+            <span>
+              {{ $t('commande.panier') }}
+            </span>
+          </v-tooltip>
+        </v-list-item-action>
       </v-list-item>
     </v-card>
-    
-    <detail-dialog ref="detailDialog" />
+
+    <DetailDialog ref="detailDialog" forme="false" />
   </div>
 </template>
 <script>
@@ -59,11 +78,54 @@ export default {
   },
 
   methods: {
-    
     showItem(item) {
       this.$refs.detailDialog.openDialog(item)
     },
 
-  }
+    async commandeNow(item) {
+      if (!this.$auth.user) {
+        this.$router.push({ path: this.localePath('/login/connexion') })
+      } else {
+        const req = {
+          produit: item.produit,
+          stock: 1,
+        }
+        const commandeRequest = []
+        commandeRequest.push(req)
+        const result = await this.$swal({
+          icon: 'question',
+          titleText: this.$t('commande.question'),
+          confirmButtonText: this.$t('commoin.actions.yes'),
+          cancelButtonText: this.$t('commoin.actions.no'),
+          confirmButtonAriaLabel: this.$t('commoin.actions.yes'),
+          cancelButtonAriaLabel: this.$t('commoin.actions.no'),
+          showCancelButton: true,
+          allowOutsideClick: () => {
+            const popup = this.$swal.getPopup()
+            popup.classList.remove('swal2-show')
+            setTimeout(() => {
+              popup.classList.add('animate__animated', 'animate__headShake')
+            })
+            setTimeout(() => {
+              popup.classList.remove('animate__animated', 'animate__headShake')
+            }, 500)
+            return false
+          },
+        })
+
+        if (result.isConfirmed) {
+          await this.$api.saveCommande({ commandeRequests: commandeRequest })
+          this.$toast.success(this.$t('commoin.saved'))
+          // await this.$auth.logout();
+          // this.$store.dispatch("resetState");
+          // this.$toast.success(this.$t("logout.loggedOut"));
+        } else if (this.$vuetify.breakpoint.smAndDown) {
+          // this.$store.dispatch('toggleDrawer', true)
+        }
+      }
+    },
+
+    panierNow(item) {},
+  },
 }
 </script>

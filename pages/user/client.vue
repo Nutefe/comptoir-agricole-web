@@ -171,18 +171,18 @@ export default {
     }
   },
 
-  // async fetch() {
-  //   this.loading = true
-  //   try {
-  //     await this.$store.dispatch('client/fetchUsers', 1)
-  //   } catch (err) {
-  //     this.$nuxt.error({
-  //       statusCode: 503,
-  //       message: 'Unable to fetch data.',
-  //     })
-  //   }
-  //   this.loading = false
-  // },
+  async fetch() {
+    this.loading = true
+    try {
+      await this.$store.dispatch('client/fetchUsers', 1)
+    } catch (err) {
+      this.$nuxt.error({
+        statusCode: 503,
+        message: 'Unable to fetch data.',
+      })
+    }
+    this.loading = false
+  },
 
   head() {
     return {
