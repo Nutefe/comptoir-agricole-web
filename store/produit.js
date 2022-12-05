@@ -3,6 +3,7 @@ const initialState = () => ({
     produit: null,
     allProduits: [],
     topProduits: [],
+    authProduits: [],
 });
 
 export const state = initialState;
@@ -18,7 +19,9 @@ export const mutations = {
     SET_TOP_PRODUITS(state, topProduits) {
         state.topProduits = topProduits;
     },
-
+    SET_AUTH_PRODUITS(state, authProduits) {
+        state.authProduits = authProduits;
+    },
     SET_PRODUITS(state, produits) {
         state.produits = produits;
     },
@@ -55,7 +58,12 @@ export const actions = {
             commit("SET_TOP_PRODUITS", data);
         });
     },
-    
+    fetchAuthProduits({ commit }) {
+        return this.$api.getAuthProduits().then((data) => {
+            commit("SET_AUTH_PRODUITS", data);
+        });
+    },
+
     fetchProduits({ commit }, page) {
         return this.$api.selectAllProduitPage(page).then((data) => {
             commit("SET_PRODUITS", data);

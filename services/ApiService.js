@@ -505,6 +505,17 @@ export default ($axios, $auth) => ({
             // },
         });
     },
+    getAuthCategories() {
+        // if (!$auth.loggedIn) {
+        //     return;
+        // }
+
+        return $axios.$get(`/auth/categories`, {
+            // headers: {
+            //     Authorization: `Bearer ${$auth.token}`,
+            // },
+        });
+    },
 
     selectAllCategoriePage(page) {
         if (!$auth.loggedIn) {
@@ -1157,6 +1168,10 @@ export default ($axios, $auth) => ({
             // },
         });
     },
+    getAuthProduits() {
+        return $axios.$get(`/auth/produits`);
+    },
+    
 
     selectAllProduitPage(page) {
         if (!$auth.loggedIn) {
@@ -1718,6 +1733,152 @@ export default ($axios, $auth) => ({
 
     /**
      * end commande axios api
+     */
+
+    /**
+     * start demande axios api
+     */
+
+    getDemande(id) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+
+        return $axios.$get(`/demande/${id}`, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+            },
+        });
+    },
+
+    getAllDemandes() {
+        if (!$auth.loggedIn) {
+            return;
+        }
+
+        return $axios.$get(`/demandes`, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+            },
+        });
+    },
+
+    selectAllDemandePage(page) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+        return $axios.$get(`/demandes/page/${page}`, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+            }
+        })
+    },
+
+    searchAllDemandePage(page, s) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+        return $axios.$get(`/demandes/search/page/${page}/${s}`, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+            }
+        })
+    },
+
+    selectAllDemandeUserConnectPage(page) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+        return $axios.$get(`/demandes/user/connect/page/${page}`, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+            }
+        })
+    },
+
+    searchAllDemandeUserConnectPage(page, s) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+        return $axios.$get(`/demandes/user/connect/search/page/${page}/${s}`, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+            }
+        })
+    },
+
+    selectAllDemandeUserPage(id, page) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+        return $axios.$get(`/demandes/user/page/${id}/${page}`, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+            }
+        })
+    },
+
+    searchAllDemandeUserPage(id, page, s) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+        return $axios.$get(`/demandes/user/search/page/${id}/${page}/${s}`, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+            }
+        })
+    },
+
+    selectAllDemandeValidePage(page) {
+        
+        return $axios.$get(`/auth/demandes/valide/page/${page}`)
+    },
+
+    searchAllDemandeValidePage(page, s) {
+        
+        return $axios.$get(`/auth/demandes/valide/search/page/${page}/${s}`)
+    },
+
+    saveDemande(demande) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+
+        return $axios.$post(`/demande`, demande, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+                "Content-Type": "multipart/form-data",
+            },
+        });
+    },
+
+    updateDemande(demande, id) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+
+        return $axios.$put(`/demande/${id}`, demande, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+                "Content-Type": "multipart/form-data",
+            },
+        });
+    },
+
+    enableDemande(id) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+
+        return $axios.$get(`/demande/valide/${id}`, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+            },
+        });
+    },
+
+    /**
+     * end demande axios api
      */
 
 

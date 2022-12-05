@@ -177,7 +177,7 @@
                   small
                   type="submit"
                 >
-                  {{ $t('connexion.login') }}
+                  {{ $t('connexion.signUp') }}
                 </v-btn>
               </v-card-text>
               <v-card-actions class="pt-0 pb-0">

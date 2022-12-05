@@ -39,25 +39,6 @@
               {{ $t('commande.bayNow') }}
             </span>
           </v-tooltip>
-          <v-tooltip top>
-            <template #activator="{ on, attrs }">
-              <v-btn
-                v-bind="attrs"
-                class="mr-3"
-                small
-                icon
-                :aria-label="$t('commande.panier')"
-                v-on="on"
-                @click.stop="panierNow(speculation)"
-              >
-                <v-icon small> mdi-basket </v-icon>
-              </v-btn>
-            </template>
-
-            <span>
-              {{ $t('commande.panier') }}
-            </span>
-          </v-tooltip>
         </v-list-item-action>
       </v-list-item>
     </v-card>

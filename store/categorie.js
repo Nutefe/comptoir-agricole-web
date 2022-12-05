@@ -3,6 +3,7 @@ const initialState = () => ({
     categorie: null,
     allCategories: [],
     topCategories: [],
+    authCategories: [],
     etat: false,
 });
 
@@ -19,6 +20,11 @@ export const mutations = {
 
     SET_TOP_CATEGORIES(state, topCategories) {
         state.topCategories = topCategories;
+    },
+
+
+    SET_AUTH_CATEGORIES(state, authCategories) {
+        state.authCategories = authCategories;
     },
 
     SET_CATEGORIES(state, categories) {
@@ -54,6 +60,11 @@ export const actions = {
     fetchTopCategories({ commit }) {
         return this.$api.getTopCategories().then((data) => {
             commit("SET_TOP_CATEGORIES", data);
+        });
+    },
+    fetchAuthCategories({ commit }) {
+        return this.$api.getAuthCategories().then((data) => {
+            commit("SET_AUTH_CATEGORIES", data);
         });
     },
     fetchCategories({ commit }, page) {

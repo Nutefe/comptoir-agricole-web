@@ -32,6 +32,16 @@ export const mixinAppBar = {
             default: null,
             required: true,
         },
+        demande: {
+            type: Object,
+            default: null,
+            required: true,
+        },
+        mesdemande: {
+            type: Object,
+            default: null,
+            required: true,
+        },
         login: {
             type: Object,
             default: null,

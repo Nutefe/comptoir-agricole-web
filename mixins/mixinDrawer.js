@@ -27,6 +27,16 @@ export const mixinDrawer = {
             default: null,
             required: true,
         },
+        demande: {
+            type: Object,
+            default: null,
+            required: true,
+        },
+        mesdemande: {
+            type: Object,
+            default: null,
+            required: true,
+        },
         logout: {
             type: Object,
             default: null,

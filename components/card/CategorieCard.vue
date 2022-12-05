@@ -7,6 +7,18 @@
         }}</v-subheader>
         <v-divider />
         <v-list-item-group color="primary" class="mt-2">
+          <v-list-item @click="fetchSpeculation()">
+            <v-list-item-icon>
+              <v-avatar size="25">
+                <v-icon>mdi-microsoft-xbox-controller-menu</v-icon>
+              </v-avatar>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title class="category">
+                {{ $t('categorie.all') }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-list-item
             v-for="item in categories"
             :key="item.id"
@@ -78,7 +90,7 @@
             <v-card>
               <v-list outlined nav dense>
                 <v-list-item
-                  v-for="subItem in categories"
+                  v-for="subItem in matchedCategories"
                   :key="`subItem-${subItem.libelle}`"
                   color="primary"
                   nuxt
@@ -113,6 +125,8 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 export default {
   props: {
     categories: {
@@ -122,6 +136,32 @@ export default {
     },
   },
 
+  // fetchAuthCategories
+  async fetch() {
+    this.loading = true
+    try {
+      await Promise.all([this.$store.dispatch('categorie/fetchAuthCategories')])
+    } catch (err) {
+      this.$nuxt.error({
+        statusCode: 503,
+        message: 'Unable to fetch data.',
+      })
+    }
+    this.loading = false
+  },
+
+  computed: {
+    matchedCategories() {
+      return this.categoriess.map((categorie) => {
+        const categoriess = categorie.libelle
+        return Object.assign({}, categorie, { categoriess })
+      })
+    },
+
+    ...mapState({
+      categoriess: (state) => state.categorie.authCategories,
+    }),
+  },
   methods: {
     async fetchSpeculationCat(ids) {
       this.loading = true
@@ -129,6 +169,22 @@ export default {
         await this.$store.dispatch(
           'speculationAgregateur/fetchAuthSpeculationsCat',
           { id: ids, page: 1 }
+        )
+      } catch (err) {
+        this.$nuxt.error({
+          statusCode: 503,
+          message: 'Unable to fetch data.',
+        })
+      }
+      this.loading = false
+    },
+
+    async fetchSpeculation() {
+      this.loading = true
+      try {
+        await this.$store.dispatch(
+          'speculationAgregateur/fetchAuthSpeculations',
+          1
         )
       } catch (err) {
         this.$nuxt.error({

@@ -95,9 +95,6 @@
             <v-icon @click="stock++">mdi-plus-circle</v-icon>
           </v-chip>
           <v-spacer />
-          <v-btn rounded text small>
-            {{ $t('commande.panier') }}
-          </v-btn>
           <v-btn
             color="secondary"
             rounded

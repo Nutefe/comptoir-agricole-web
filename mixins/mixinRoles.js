@@ -12,6 +12,14 @@ export const mixinRoles = {
       }
     },
 
+    isConnect(){
+      if (this.$auth.user) {
+          return true;
+      } else {
+          return false;
+      }
+  },
+
 
     fullname() {
       if (this.$auth.user) {

@@ -6,17 +6,10 @@ export default {
     },
 
     // Navigation Drawer
-    navDrawer: {
-        dashboard: "Tableau de bord",
-        shops: "Boutiques",
-        users: "Utilisateurs",
-    },
-
-    // Navigation Drawer
     navigation: {
         accueil: "Accueil",
         dashboard: "Dashboard",
-        commande: "Panier",
+        commande: "Demande",
         user: {
             title: "Users",
             admin: "Admins",
@@ -40,9 +33,14 @@ export default {
             typeSpeculation: "Type speculations",
         },
         speculation: {
-            title: "Speculations",
+            title: "Offre",
             agregateur: "Mes speculations",
             exploitant: "Speculations exploitants",
+        },
+        demande: {
+            title: "Demandes",
+            mes: "Mes demandes",
+            admin: "Toutes les demandes",
         },
         profil: "Profile",
     },
@@ -68,17 +66,6 @@ export default {
     drawer: {
         open: "Ouvrir le tiroir de navigation",
         close: "Fermer le tiroir de navigation",
-    },
-
-    // Navigation Bar
-    navbar: {
-        home: "Accueil",
-        actualites: "Actualités",
-        artisans: "Artisans",
-        metiers: "Métiers",
-        login: "Se Connecter",
-        register: "S'Inscrire",
-        search: "Recherche",
     },
 
     search: {
@@ -161,13 +148,6 @@ export default {
         newPassword: "Nouveu mot de passe",
         confirmPassword: "Confirmer le mot de passe",
         email: "Votre email",
-    },
-
-    dashboard: {
-        recette: "Recettes",
-        depense: "Depenses",
-        banque: "Banques",
-        caisse: "Caisses",
     },
 
     user: {
@@ -505,8 +485,8 @@ export default {
         update: "Modifier",
         search: "Recherche...",
         etat: "Etat du stock",
-        enable: "Rendre visible",
-        disable: "Rendre non visible",
+        enable: "Publier",
+        disable: "Desactiver la publication",
         question: "Prêt à validé cette spéculation?",
         form: {
             produit: "Produit",
@@ -561,6 +541,38 @@ export default {
             stock: "Stock",
             action: "Action",
             per_page: "Produit par page",
+            page_text: "de",
+        },
+    },
+
+    demande: {
+        title: "Demandes",
+        new: "Nouvelle demande",
+        edit: "Modifier une demande",
+        update: "Modifier",
+        search: "Recherche...",
+        etat: "Etat du stock",
+        enable: "Publier",
+        disable: "Desactiver la publication",
+        question: "Prêt à validé cette demande?",
+        form: {
+            produit: "Produit",
+            stock: "Stock souhaite",
+            prix: "Prix",
+            contact: "Contact",
+            images: "Images",
+            description: "Description",
+        },
+        table: {
+            num: "N°",
+            produit: "Produit",
+            stock: "Stock souhaite",
+            prix: "Prix",
+            contact: "Contact",
+            images: "Images",
+            description: "Description",
+            action: "Action",
+            per_page: "Mode de paiement par page",
             page_text: "de",
         },
     },
@@ -752,7 +764,7 @@ export default {
         },
 
         produit: {
-            required: "Le magasin est obligatoire.",
+            required: "Le produit est obligatoire.",
         },
 
         superficie: {
@@ -777,6 +789,24 @@ export default {
             required: "Le stock previsionnel est obligatoire.",
             min: "Le stock previsionnel  doit contenir au moins {length} caractères.",
             max: "Le stock previsionnel doit contenir au plus {length} caractères.",
+        },
+
+        stock: {
+            required: "Le stock est obligatoire.",
+            min: "Le stock doit contenir au moins {length} caractères.",
+            max: "Le stock doit contenir au plus {length} caractères.",
+        },
+
+        prix: {
+            required: "Le prix est obligatoire.",
+            min: "Le prix doit contenir au moins {length} caractères.",
+            max: "Le prix doit contenir au plus {length} caractères.",
+        },
+
+        contact: {
+            required: "Le contact est obligatoire.",
+            min: "Le contact doit contenir au moins {length} caractères.",
+            max: "Le contact doit contenir au plus {length} caractères.",
         },
 
         exploitant: {

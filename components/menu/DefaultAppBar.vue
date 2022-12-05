@@ -210,6 +210,7 @@
                     </v-list-item>
 
                     <v-list-item
+                      v-if="!isClient"
                       class="no-active"
                       :to="localePath(speculation.path)"
                       nuxt
@@ -221,6 +222,23 @@
                       <v-list-item-content>
                         <v-list-item-title>{{
                           speculation.title
+                        }}</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+
+                    <v-list-item
+                      v-if="!isAdmin && !isAgregateur"
+                      class="no-active"
+                      :to="localePath(mesdemande.path)"
+                      nuxt
+                    >
+                      <v-list-item-icon class="mr-3">
+                        <v-icon>{{ mesdemande.icon }}</v-icon>
+                      </v-list-item-icon>
+
+                      <v-list-item-content>
+                        <v-list-item-title>{{
+                          mesdemande.title
                         }}</v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
@@ -237,6 +255,22 @@
                       <v-list-item-content>
                         <v-list-item-title>{{
                           speculationAg.title
+                        }}</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item
+                      v-if="isAdmin"
+                      class="no-active"
+                      :to="localePath(demande.path)"
+                      nuxt
+                    >
+                      <v-list-item-icon class="mr-3">
+                        <v-icon>{{ demande.icon }}</v-icon>
+                      </v-list-item-icon>
+
+                      <v-list-item-content>
+                        <v-list-item-title>{{
+                          demande.title
                         }}</v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>

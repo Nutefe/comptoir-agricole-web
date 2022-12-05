@@ -7,15 +7,15 @@
           <v-row>
             <v-col
               v-for="n in 12"
-              :key="`speclation-skeleton-${n}`"
+              :key="`demande-skeleton-${n}`"
               cols="12"
               sm="6"
               md="4"
             >
               <v-skeleton-loader
-                type="speculation"
+                type="demande"
                 :types="{
-                  speculation: 'list-item-avatar-three-line',
+                  demande: 'list-item-avatar-three-line',
                 }"
               />
             </v-col>
@@ -26,14 +26,13 @@
       <template v-else>
         <v-col></v-col>
         <v-col cols="12" sm="10">
-          <!-- <PageTitle :title="$t('speculation.title')" /> -->
           <v-row class="mb-5 align-middle" align="center" justify="center">
             <v-col cols="12" sm="2"> </v-col>
             <v-col class="col-8">
               <v-text-field
                 v-model.lazy.trim="query"
                 append-icon="mdi-magnify"
-                :placeholder="$t('speculation.search')"
+                :placeholder="$t('demande.search')"
                 autocomplete="off"
                 type="search"
                 clearable
@@ -50,30 +49,31 @@
           </v-row>
           <v-row>
             <v-col
-              v-for="item in itemsList"
-              :key="`speculetion${item.id}`"
+              v-for="demande in itemsList"
+              :key="`demande${demande.id}`"
               cols="12"
               sm="6"
               md="4"
             >
               <v-card class="mx-auto" outlined>
-                <v-list-item three-line @click="showItem(item)">
+                <v-list-item three-line @click.stop="showItem(demande)">
                   <v-list-item-avatar tile size="100" color="grey"
                     ><v-img
-                      v-if="item.fichiers[0]"
-                      :src="`${$axios.defaults.baseURL}/downloadFile/${item.fichiers[0].name}`"
+                      v-if="demande.fichiers[0]"
+                      :src="`${$axios.defaults.baseURL}/downloadFile/${demande.fichiers[0].name}`"
                   /></v-list-item-avatar>
                   <v-list-item-content>
                     <div class="text-overline mb-4">
-                      {{ item.produit.categorie.libelle }}
+                      {{ demande.produit.categorie.libelle }}
                     </div>
                     <v-list-item-title class="mb-1">
-                      {{ item.produit.designation }}
+                      {{ demande.produit.designation }}
                     </v-list-item-title>
                     <v-list-item-subtitle>
-                      {{ item.description }}
+                      {{ demande.description }}
                     </v-list-item-subtitle>
                   </v-list-item-content>
+
                   <v-list-item-action>
                     <v-spacer />
                     <v-tooltip top>
@@ -83,58 +83,31 @@
                           class="mr-3"
                           small
                           icon
-                          :aria-label="$t('commoin.actions.edit')"
+                          :aria-label="$t('demande.edit')"
                           v-on="on"
-                          @click.stop="editItem(item)"
+                          @click.stop="editItem(demande)"
                         >
                           <v-icon small> mdi-pencil </v-icon>
                         </v-btn>
                       </template>
 
                       <span>
-                        {{ $t('commoin.actions.edit') }}
-                      </span>
-                    </v-tooltip>
-                    <v-tooltip top>
-                      <template #activator="{ on, attrs }">
-                        <v-btn
-                          v-bind="attrs"
-                          class="mr-3"
-                          small
-                          icon
-                          :aria-label="$t('speculation.disable')"
-                          v-on="on"
-                          @click.stop="enableItem(item)"
-                        >
-                          <v-icon v-if="item.valide" color="secondary" small>
-                            mdi-check-circle
-                          </v-icon>
-                          <v-icon v-else color="red" small>
-                            mdi-check-circle
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span v-if="item.valide">
-                        {{ $t('speculation.disable') }}
-                      </span>
-                      <span v-else>
-                        {{ $t('speculation.enable') }}
+                        {{ $t('demande.edit') }}
                       </span>
                     </v-tooltip>
                   </v-list-item-action>
                 </v-list-item>
               </v-card>
-              <!-- <SpeculationCard :speculation="item" /> -->
+              <!-- <DemandeCard :demande="item" /> -->
             </v-col>
           </v-row>
           <Pagination
             v-if="query"
             :by-id="query"
-            store="speculationExploitant"
-            collection="regionSpeculations"
-            action="searchRegionSpeculations"
+            store="demandeUserConnect"
+            collection="demandes"
+            action="searchDemandes"
             :disabled="loading"
-            page-mutation="SET_CURRENT_REGION_PAGE"
             class="mb-2 mt-2"
             align="right"
             @loading="toggleLoading"
@@ -142,15 +115,16 @@
 
           <Pagination
             v-else
-            store="speculationExploitant"
-            collection="regionSpeculations"
-            action="fetchRegionSpeculations"
+            store="demandeUserConnect"
+            collection="demandes"
+            action="fetchDemandes"
             :disabled="loading"
-            page-mutation="SET_CURRENT_REGION_PAGE"
             class="mb-2 mt-2"
             align="right"
             @loading="toggleLoading"
           />
+          <DemandeCreate @refreshPage="refreshPage" />
+          <DemandeEdit ref="editFormDialog" @refreshPage="refreshPage" />
         </v-col>
         <v-col></v-col>
       </template>
@@ -160,15 +134,14 @@
 
 <script>
 import { mapState } from 'vuex'
-// import SpeculationCard from '~/components/card/SpeculationCard.vue'
+// import DemandeCard from '~/components/card/DemandeCard.vue'
+import DemandeCreate from '~/components/page/demande/DemandeCreate.vue'
+import DemandeEdit from '~/components/page/demande/DemandeEdit.vue'
 import { debounce, startCase } from '~/helpers/helpers.js'
 
 export default {
-  name: 'ProduitPage',
-
-  components: {
-    // SpeculationCard,
-  },
+  name: 'DemandePage',
+  components: { DemandeCreate, DemandeEdit },
 
   layout: 'default',
 
@@ -179,44 +152,38 @@ export default {
       loading: false,
       headers: [
         {
-          text: this.$t('speculation.table.num'),
+          text: this.$t('demande.table.num'),
           value: 'num',
           class: 'text-subtitle-2 text-uppercase font-weight-bold',
           cellClass: 'py-3',
           width: 100,
         },
         {
-          text: this.$t('speculation.table.produit'),
+          text: this.$t('demande.table.produit'),
           value: 'produit.designation',
           class: 'text-subtitle-2 text-uppercase font-weight-bold',
           cellClass: 'py-3',
         },
         {
-          text: this.$t('speculation.table.superficie'),
-          value: 'superficie',
+          text: this.$t('demande.table.stock'),
+          value: 'stock',
           class: 'text-subtitle-2 text-uppercase font-weight-bold',
           cellClass: 'py-3',
         },
         {
-          text: this.$t('speculation.table.supNonExploite'),
-          value: 'supNonExploite',
+          text: this.$t('demande.table.prix'),
+          value: 'prix',
           class: 'text-subtitle-2 text-uppercase font-weight-bold',
           cellClass: 'py-3',
         },
         {
-          text: this.$t('speculation.table.stockSpontane'),
-          value: 'stockSpontane',
+          text: this.$t('demande.table.contact'),
+          value: 'contact',
           class: 'text-subtitle-2 text-uppercase font-weight-bold',
           cellClass: 'py-3',
         },
         {
-          text: this.$t('speculation.table.stockPrevisionnel'),
-          value: 'stockPrevisionnel',
-          class: 'text-subtitle-2 text-uppercase font-weight-bold',
-          cellClass: 'py-3',
-        },
-        {
-          text: this.$t('speculation.table.action'),
+          text: this.$t('demande.table.action'),
           value: 'action',
           class: 'text-subtitle-2 text-uppercase font-weight-bold',
           cellClass: 'py-3',
@@ -230,10 +197,7 @@ export default {
   async fetch() {
     this.loading = true
     try {
-      await this.$store.dispatch(
-        'speculationExploitant/fetchRegionSpeculations',
-        1
-      )
+      await this.$store.dispatch('demandeUserConnect/fetchDemandes', 1)
     } catch (err) {
       this.$nuxt.error({
         statusCode: 503,
@@ -245,46 +209,46 @@ export default {
 
   head() {
     return {
-      title: this.$t('speculation.title'),
+      title: this.$t('demande.title'),
     }
   },
 
   computed: {
     itemsList() {
-      if (this.speculations && this.speculations.data) {
-        return this.speculations.data
+      if (this.demandes && this.demandes.data) {
+        return this.demandes.data
       } else {
         return []
       }
     },
 
     currentPage() {
-      if (this.speculations) {
-        return this.speculations.current_page || 1
+      if (this.demandes) {
+        return this.demandes.current_page || 1
       } else {
         return 1
       }
     },
 
     isDividerVisible() {
-      if (this.speculations) {
-        const total = this.speculations.total || 0
-        const perPage = this.speculations.per_page || 0
+      if (this.demandes) {
+        const total = this.demandes.total || 0
+        const perPage = this.demandes.per_page || 0
         return total > perPage
       } else {
         return false
       }
     },
     countSpeculation() {
-      if (this.speculations) {
-        const total = this.speculations.total
+      if (this.demandes) {
+        const total = this.demandes.total
         return total
       } else {
         return 0
       }
     },
     ...mapState({
-      speculations: (state) => state.speculationExploitant.regionSpeculations,
+      demandes: (state) => state.demandeUserConnect.demandes,
     }),
   },
 
@@ -295,6 +259,7 @@ export default {
     itemPosition(itemId) {
       return this.itemsList.findIndex((elm) => elm.id === itemId) + 1
     },
+
     editItem(item) {
       this.$refs.editFormDialog.openDialog(item)
     },
@@ -306,57 +271,16 @@ export default {
       }
     },
 
-    async enableItem(item) {
-      if (this.$vuetify.breakpoint.mobile) {
-        this.$store.dispatch('toggleDrawer', false)
-      }
-
-      const result = await this.$swal({
-        icon: 'question',
-        titleText: this.$t('speculation.question'),
-        confirmButtonText: this.$t('commoin.actions.yes'),
-        cancelButtonText: this.$t('commoin.actions.no'),
-        confirmButtonAriaLabel: this.$t('commoin.actions.yes'),
-        cancelButtonAriaLabel: this.$t('commoin.actions.no'),
-        showCancelButton: true,
-        allowOutsideClick: () => {
-          const popup = this.$swal.getPopup()
-          popup.classList.remove('swal2-show')
-          setTimeout(() => {
-            popup.classList.add('animate__animated', 'animate__headShake')
-          })
-          setTimeout(() => {
-            popup.classList.remove('animate__animated', 'animate__headShake')
-          }, 500)
-          return false
-        },
-      })
-
-      if (result.isConfirmed) {
-        this.$store.dispatch('speculation/enableSpeculations', item.id)
-        this.fetchData(1)
-        this.$toast.success(this.$t('commoin.valide'))
-      } else if (this.$vuetify.breakpoint.smAndDown) {
-        this.$store.dispatch('toggleDrawer', true)
-      }
-    },
-
     async fetchData(page) {
       this.loading = true
       try {
         if (this.query) {
-          await this.$store.dispatch(
-            'speculationExploitant/searchRegionSpeculations',
-            {
-              page,
-              search: this.query,
-            }
-          )
+          await this.$store.dispatch('demandeUserConnect/searchDemandes', {
+            page,
+            search: this.query,
+          })
         } else {
-          await this.$store.dispatch(
-            'speculationExploitant/fetchRegionSpeculations',
-            page
-          )
+          await this.$store.dispatch('demandeUserConnect/fetchDemandes', page)
         }
       } catch (err) {
         this.$nuxt.error({

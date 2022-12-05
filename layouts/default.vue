@@ -11,6 +11,8 @@
       :siginup-exp="siginupExp"
       :speculation="speculation"
       :speculation-ag="speculationCo"
+      :demande="demande"
+      :mesdemande="mesdemande"
     />
 
     <DefaultAppBar
@@ -23,6 +25,8 @@
       :siginup-exp="siginupExp"
       :speculation="speculation"
       :speculation-ag="speculationCo"
+      :demande="demande"
+      :mesdemande="mesdemande"
     />
     <v-main>
       <v-container fluid>
@@ -62,6 +66,16 @@ export default {
         subtitle: this.$t('navigation.speculation'),
         path: '/speculation/exploitant',
       },
+      demande: {
+        title: this.$t('navigation.demande.admin'),
+        subtitle: this.$t('navigation.demande.title'),
+        path: '/demande/admindemande',
+      },
+      mesdemande:{
+        title: this.$t('navigation.demande.mes'),
+        subtitle: this.$t('navigation.demande.title'),
+        path: '/demande/mesdemande',
+      },
       profileRoute: {
         title: this.$t('navigation.profil'),
         subtitle: this.$t('navigation.profil'),
@@ -100,7 +114,7 @@ export default {
         },
         {
           title: this.$t('navigation.commande'),
-          path: '/commande',
+          path: '/demande',
           icon: 'mdi-shopping',
         },
       ],
