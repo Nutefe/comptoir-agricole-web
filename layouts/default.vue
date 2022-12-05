@@ -213,3 +213,13 @@ export default {
   },
 }
 </script>
+<style scoped>
+.bg-main{
+  background-image: url('/img/login_background3.jpg');
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  /* opacity: 0.65; */
+  /* filter: blur(8px); */
+}
+</style>

@@ -32,7 +32,10 @@
                 v-on="on"
                 @click.stop="enableItem(demande)"
               >
-                <v-icon small> mdi-cart </v-icon>
+                <v-icon v-if="demande.valide" color="secondary" small>
+                  mdi-check-circle
+                </v-icon>
+                <v-icon v-else color="red" small> mdi-check-circle </v-icon>
               </v-btn>
             </template>
 
@@ -53,7 +56,7 @@ import { mixinRoles } from '~/mixins/mixinRoles.js'
 
 export default {
   components: { DetailDemandeDialog },
-    mixins: [mixinRoles],
+  mixins: [mixinRoles],
 
   props: {
     demande: {

@@ -60,9 +60,9 @@
             active-class="deep-purple accent-4 white--text"
             column
           >
-            <v-chip>{{ demande.stock }} stock souhaite</v-chip>
+            <v-chip>{{ demande.stockDemande }} stock souhaite</v-chip>
 
-            <v-chip>{{ demande.prix }} prix</v-chip>
+            <v-chip>{{ demande.prixSouhaite }} prix</v-chip>
           </v-chip-group>
         </v-card-text>
       </template>
