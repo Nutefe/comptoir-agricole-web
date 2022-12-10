@@ -221,6 +221,42 @@ export default {
       }
     },
 
+    async enableItem(item) {
+      if (this.$vuetify.breakpoint.mobile) {
+        this.$store.dispatch('toggleDrawer', false)
+      }
+
+      const result = await this.$swal({
+        icon: 'question',
+        titleText: this.$t('slider.question'),
+        confirmButtonText: this.$t('commoin.actions.yes'),
+        cancelButtonText: this.$t('commoin.actions.no'),
+        confirmButtonAriaLabel: this.$t('commoin.actions.yes'),
+        cancelButtonAriaLabel: this.$t('commoin.actions.no'),
+        showCancelButton: true,
+        allowOutsideClick: () => {
+          const popup = this.$swal.getPopup()
+          popup.classList.remove('swal2-show')
+          setTimeout(() => {
+            popup.classList.add('animate__animated', 'animate__headShake')
+          })
+          setTimeout(() => {
+            popup.classList.remove('animate__animated', 'animate__headShake')
+          }, 500)
+          return false
+        },
+      })
+
+      if (result.isConfirmed) {
+        this.$store.dispatch('slider/enableSlider', item.id)
+        this.fetchData(1)
+        this.$toast.success(this.$t('commoin.valide'))
+      } else if (this.$vuetify.breakpoint.smAndDown) {
+        this.$store.dispatch('toggleDrawer', true)
+      }
+    },
+
+
     async fetchData(page) {
       this.loading = true
       try {

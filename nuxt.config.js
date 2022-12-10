@@ -5,10 +5,10 @@ const SITE_DESC = `agricole`;
 const HOST = "";
 
 // Development
-// const API_BASE_URL = "http://localhost:8091/web/service";
+const API_BASE_URL = "http://localhost:8091/web/service";
 
 // Production
-const API_BASE_URL = "http://51.75.162.85:8080/agro_bourse/web/service";
+// const API_BASE_URL = "http://51.75.162.85:8080/agro_bourse/web/service";
 
 
 export default {

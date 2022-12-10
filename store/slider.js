@@ -59,5 +59,8 @@ export const actions = {
             commit("SET_SEARCHED_SLIDERS", data);
         });
     },
-
+    
+    enableSlider({ commit }, id) {
+        return this.$api.enableSlider(id);
+    },
 };
