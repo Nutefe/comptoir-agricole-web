@@ -152,7 +152,7 @@ export default {
     return {
       dialog: false,
       loading: false,
-      countImg: 1,
+      countImg: 4,
       id: null,
       selectedItem: {
         produit: null,

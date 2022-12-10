@@ -1882,4 +1882,100 @@ export default ($axios, $auth) => ({
      */
 
 
+    /**
+     * start slide axios api
+     */
+
+    getSlider(id) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+
+        return $axios.$get(`/slider/${id}`, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+            },
+        });
+    },
+
+    getAllSliders() {
+        if (!$auth.loggedIn) {
+            return;
+        }
+
+        return $axios.$get(`/sliders`, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+            },
+        });
+    },
+
+    selectAllSliderPage(page) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+        return $axios.$get(`/sliders/page/${page}`, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+            }
+        })
+    },
+
+    searchAllSliderPage(page, s) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+        return $axios.$get(`/sliders/search/page/${page}/${s}`, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+            }
+        })
+    },
+
+    selectAllSliderValidePage() {
+        
+        return $axios.$get(`/auth/sliders`)
+    },
+
+    saveSlider(slider) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+
+        return $axios.$post(`/slider`, slider, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+                "Content-Type": "multipart/form-data",
+            },
+        });
+    },
+
+    updateSlider(slider, id) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+
+        return $axios.$put(`/slider/${id}`, slider, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+                "Content-Type": "multipart/form-data",
+            },
+        });
+    },
+
+    enableSlider(id) {
+        if (!$auth.loggedIn) {
+            return;
+        }
+
+        return $axios.$get(`/slider/valide/${id}`, {
+            headers: {
+                Authorization: `Bearer ${$auth.token}`,
+            },
+        });
+    },
+
+    /**
+     * end slide axios api
+     */
 });

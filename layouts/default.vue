@@ -195,11 +195,11 @@ export default {
                 path: '/parametre/produit',
                 icon: 'mdi-file-chart-outline',
               },
-              // {
-              //   title: this.$t('navigation.parametre.modePaiement'),
-              //   path: '/parametre/modePaiement',
-              //   icon: 'mdi-file-chart-outline',
-              // },
+              {
+                title: this.$t('navigation.parametre.slide'),
+                path: '/parametre/slide',
+                icon: 'mdi-file-chart-outline',
+              },
               // {
               //   title: this.$t('navigation.parametre.typeSpeculation'),
               //   path: '/parametre/typeSpeculation',

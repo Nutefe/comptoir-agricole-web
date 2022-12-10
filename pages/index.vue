@@ -22,12 +22,12 @@
                   dark
                 >
                   <v-carousel-item
-                    v-for="slide in topProduits"
+                    v-for="slide in sliders"
                     :key="`carousel-item-${slide.id}`"
                   >
                     <v-img
                       class="fill-height"
-                      :src="`${$axios.defaults.baseURL}/downloadFile/${slide.fichier.name}`"
+                      :src="`${$axios.defaults.baseURL}/downloadFile/${slide.fichiers[0].name}`"
                     >
                       <v-row class="fill-height" align="center">
                         <v-card
@@ -105,6 +105,7 @@ export default {
       await Promise.all([
         this.$store.dispatch('categorie/fetchTopCategories'),
         this.$store.dispatch('produit/fetchTopProduits'),
+        this.$store.dispatch('slider/fetchAuthSliders'),
         this.$store.dispatch('speculationAgregateur/fetchAuthSpeculations', 1),
       ])
     } catch (err) {
@@ -177,6 +178,7 @@ export default {
       topCategories: (state) => state.categorie.topCategories,
       topProduits: (state) => state.produit.topProduits,
       speculations: (state) => state.speculationAgregateur.authSpeculations,
+      sliders: (state) => state.slider.authSliders,
     }),
   },
 

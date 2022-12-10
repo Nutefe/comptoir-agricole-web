@@ -31,6 +31,7 @@ export default {
             produit: "Produits",
             modePaiement: "Mode paiements",
             typeSpeculation: "Type speculations",
+            slide: "Slider",
         },
         speculation: {
             title: "Offre",
@@ -571,6 +572,29 @@ export default {
             contact: "Contact",
             images: "Images",
             description: "Description",
+            action: "Action",
+            per_page: "Mode de paiement par page",
+            page_text: "de",
+        },
+    },
+
+    slider: {
+        title: "Slider",
+        new: "Nouvelle slide",
+        edit: "Modifier une slide",
+        update: "Modifier",
+        search: "Recherche...",
+        enable: "Publier",
+        disable: "Desactiver la publication",
+        question: "Prêt à validé cette demande?",
+        form: {
+            libelle: "Libelle",
+            images: "Images",
+        },
+        table: {
+            num: "N°",
+            libelle: "Libelle",
+            images: "Images",
             action: "Action",
             per_page: "Mode de paiement par page",
             page_text: "de",
