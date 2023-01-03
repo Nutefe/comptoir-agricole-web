@@ -66,7 +66,7 @@
             action="searchAuthSpeculations"
             :disabled="loading"
             page-mutation="SET_CURRENT_AUTH_PAGE"
-            class="mb-2 mt-2"
+            class="mb-10 mt-2"
             align="right"
             @loading="toggleLoading"
           />
@@ -78,7 +78,7 @@
             action="fetchAuthSpeculations"
             :disabled="loading"
             page-mutation="SET_CURRENT_AUTH_PAGE"
-            class="mb-2 mt-2"
+            class="mb-10 mt-2"
             align="right"
             @loading="toggleLoading"
           />

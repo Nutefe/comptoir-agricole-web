@@ -8,7 +8,7 @@ const HOST = "";
 // const API_BASE_URL = "http://localhost:8091/web/service";
 
 // Production
-const API_BASE_URL = "http://51.75.162.85:8080/agro_bourse/web/service";
+const API_BASE_URL = "https://shopymanager.com:8443/agro_bourse/web/service";
 
 
 export default {
@@ -24,7 +24,7 @@ export default {
       { name: 'format-detection', content: 'telephone=no' },
     ],
     link: [
-      // { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: '/icon.jpg' },
       {
         rel: "stylesheet",
         href: "https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css",

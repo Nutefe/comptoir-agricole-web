@@ -28,9 +28,8 @@
       :demande="demande"
       :mesdemande="mesdemande"
     />
-    <v-main>
+    <v-main class="bg-main">
       <v-container fluid>
-        <!-- <login-dialog ref="loginDialogForm" /> -->
         <Nuxt />
       </v-container>
     </v-main>
@@ -215,7 +214,7 @@ export default {
 </script>
 <style scoped>
 .bg-main{
-  background-image: url('/img/login_background3.jpg');
+  background-image: url('/img/back2.webp');
   background-attachment: fixed;
   background-position: center;
   background-size: cover;
