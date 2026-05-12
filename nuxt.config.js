@@ -5,8 +5,8 @@ const SITE_DESC = `agricole`
 const HOST = ''
 
 // Development
-// const API_BASE_URL = 'http://localhost:8091/web/service'
-const API_BASE_URL = 'http://51.195.148.104:8080/agro_bourse/web/service'
+const API_BASE_URL = 'http://localhost:8091/web/service'
+// const API_BASE_URL = 'http://51.195.148.104:8080/agro_bourse/web/service'
 // Production
 // const API_BASE_URL = "https://shopymanager.com:8443/agro_bourse/web/service";
 

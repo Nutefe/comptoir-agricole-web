@@ -2,7 +2,7 @@
 <template>
   <div>
     <v-card min-height="400" class="mx-auto" elevation="0">
-      <p class="pt-10 mb-5">
+      <p class="pt-10 mb-5" style="font-size: 80%; text-align: center">
         {{ $t('connexion.msg') }}
       </p>
       <div class="my-5 mx-3">
